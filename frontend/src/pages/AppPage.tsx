@@ -16,8 +16,26 @@ export default function AppPage() {
   const [verificationCount, setVerificationCount] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [devnetOnline, setDevnetOnline] = useState<boolean | null>(null);
   const [message, setMessage] = useState('');
   const [providers, setProviders] = useState<any>(null);
+
+  const checkDevnetHealth = async () => {
+    try {
+      const res = await fetch('http://localhost:8088/api/v1/graphql', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query: '{ __typename }' })
+      });
+      setDevnetOnline(res.status < 500);
+    } catch {
+      setDevnetOnline(false);
+    }
+  };
+
+  useEffect(() => {
+    checkDevnetHealth();
+  }, []);
 
   const copyAddress = () => {
     if (!contractAddress) return;
@@ -123,6 +141,11 @@ export default function AppPage() {
             
             <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
               <span className="badge badge-primary">Network: {network}</span>
+              {devnetOnline !== null && (
+                <span className={`badge ${devnetOnline ? 'badge-success' : ''}`} style={{ background: devnetOnline ? undefined : '#fef2f2', color: devnetOnline ? undefined : '#991b1b' }}>
+                  {devnetOnline ? '⚡ Devnet Ready' : '⚠️ Local Devnet Offline'}
+                </span>
+              )}
               <span className={`badge ${walletConnected ? 'badge-success' : ''}`} style={{ background: walletConnected ? undefined : '#f1f5f9', color: walletConnected ? undefined : '#64748b' }}>
                 {walletConnected ? '🟢 Lace Connected' : '⚪ Disconnected'}
               </span>
