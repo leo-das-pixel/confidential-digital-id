@@ -12,8 +12,8 @@ export default defineConfig({
       include: ['buffer', 'assert', 'crypto', 'events', 'stream', 'util'],
       globals: { Buffer: true, global: true, process: true },
     }),
-    wasm(),
-    topLevelAwait()
+    (wasm as any)(),
+    (topLevelAwait as any)()
   ],
   build: {
     target: 'esnext',

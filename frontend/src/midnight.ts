@@ -15,49 +15,89 @@ import type {
 import type { UnboundTransaction } from '@midnight-ntwrk/midnight-js-types';
 
 export const getFirstCompatibleWallet = (): InitialAPI | undefined => {
-  if (!window.midnight) return undefined;
-  return Object.values(window.midnight).find(
-    (wallet): wallet is InitialAPI =>
-      !!wallet &&
-      typeof wallet === 'object' &&
-      'apiVersion' in wallet &&
-      wallet.apiVersion.startsWith('4.')
-  );
+  if (typeof window === 'undefined' || !(window as any).midnight) return undefined;
+  const midnight = (window as any).midnight;
+  
+  const walletList = Object.values(midnight);
+  if (walletList.length === 0) return undefined;
+  
+  const wallet = walletList.find((w: any) => w && typeof w === 'object' && typeof w.connect === 'function') as InitialAPI | undefined;
+  return wallet || (walletList[0] as InitialAPI);
 };
 
 export const connectToWallet = async (networkId: string): Promise<ConnectedAPI> => {
   const start = Date.now();
   let initialAPI: InitialAPI | undefined;
   
-  while (Date.now() - start < 1000) {
+  while (Date.now() - start < 3000) {
     initialAPI = getFirstCompatibleWallet();
     if (initialAPI) break;
-    await new Promise(r => setTimeout(r, 100));
+    await new Promise(r => setTimeout(r, 200));
   }
   
-  if (!initialAPI) throw new Error('Could not find Midnight Lace wallet. Extension installed?');
+  if (!initialAPI) {
+    throw new Error('Midnight Lace wallet extension not detected in browser. Please install/enable Lace.');
+  }
   
-  const connectPromise = initialAPI.connect(networkId);
-  const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('Midnight Lace wallet has failed to respond. Extension enabled?')), 5000));
+  console.log('Connecting to Midnight Lace wallet...', initialAPI);
   
   try {
-    const connectedAPI = await Promise.race([connectPromise, timeoutPromise]) as ConnectedAPI;
+    const connectedAPI = await initialAPI.connect(networkId);
+    console.log('Successfully connected to Lace wallet!');
     return connectedAPI;
-  } catch (error) {
-    throw new Error('Application is not authorized');
+  } catch (error: any) {
+    console.error('Lace wallet connection error:', error);
+    if (error?.message?.includes('locked') || error?.reason?.includes('locked')) {
+      throw new Error('🔒 Your Midnight Lace wallet is locked. Please unlock the extension in Chrome first.');
+    }
+    throw new Error(`Wallet connection failed: ${error?.message || 'User or extension rejected connection'}`);
   }
 };
 
 export const initializeProviders = async (networkId: string, zkConfigUrl: string) => {
   const connectedAPI = await connectToWallet(networkId);
+  console.log('Connected API established, loading providers...');
+
   const keyMaterialProvider = new FetchZkConfigProvider(zkConfigUrl, fetch.bind(window));
-  const config = await connectedAPI.getConfiguration();
-  const shieldedAddresses = await connectedAPI.getShieldedAddresses();
+  
+  // Use root base URL for indexer; indexerPublicDataProvider automatically appends /api/v1/graphql
+  let indexerUri = 'http://localhost:8088';
+  let indexerWsUri = 'ws://localhost:8088';
+  let proverServerUri = 'http://localhost:6300';
+  
+  try {
+    const remoteConfig = await connectedAPI.getConfiguration();
+    if (remoteConfig && remoteConfig.indexerUri) {
+      indexerUri = remoteConfig.indexerUri.replace(/\/api\/v.*$/, '').replace(/\/graphql$/, '');
+      if (remoteConfig.indexerWsUri) {
+        indexerWsUri = remoteConfig.indexerWsUri.replace(/\/api\/v.*$/, '').replace(/\/graphql\/ws$/, '');
+      }
+      if (remoteConfig.proverServerUri) {
+        proverServerUri = remoteConfig.proverServerUri;
+      }
+    }
+  } catch (e: any) {
+    console.warn('Could not fetch config from wallet:', e?.message || e);
+    if (e?.message?.includes('locked') || e?.reason?.includes('locked')) {
+      throw new Error('🔒 Your Midnight Lace wallet is locked. Please unlock the extension in Chrome first.');
+    }
+  }
+
+  let shieldedAddresses: any = { shieldedCoinPublicKey: '00', shieldedEncryptionPublicKey: '00' };
+  try {
+    const addrs = await connectedAPI.getShieldedAddresses();
+    if (addrs) shieldedAddresses = addrs;
+  } catch (e: any) {
+    console.warn('Could not fetch shielded addresses:', e?.message || e);
+    if (e?.message?.includes('locked') || e?.reason?.includes('locked')) {
+      throw new Error('🔒 Your Midnight Lace wallet is locked. Please unlock the extension in Chrome first.');
+    }
+  }
 
   return {
     zkConfigProvider: keyMaterialProvider,
-    proofProvider: httpClientProofProvider(config.proverServerUri!, keyMaterialProvider),
-    publicDataProvider: indexerPublicDataProvider(config.indexerUri, config.indexerWsUri),
+    proofProvider: httpClientProofProvider(proverServerUri, keyMaterialProvider),
+    publicDataProvider: indexerPublicDataProvider(indexerUri, indexerWsUri),
     walletProvider: {
       getCoinPublicKey(): string {
         return shieldedAddresses.shieldedCoinPublicKey;
