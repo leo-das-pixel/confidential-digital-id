@@ -15,8 +15,16 @@ export default function AppPage() {
   const [credentialName, setCredentialName] = useState<string | null>(null);
   const [verificationCount, setVerificationCount] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
+  const [copied, setCopied] = useState(false);
   const [message, setMessage] = useState('');
   const [providers, setProviders] = useState<any>(null);
+
+  const copyAddress = () => {
+    if (!contractAddress) return;
+    navigator.clipboard.writeText(contractAddress);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   const connectWallet = async () => {
     try {
@@ -139,6 +147,15 @@ export default function AppPage() {
                 placeholder="0x..." 
                 style={{ flex: 1, padding: '10px 14px', borderRadius: 8, border: '1px solid #cbd5e1', fontSize: 14, fontFamily: 'monospace' }}
               />
+              <button 
+                className="btn btn-secondary" 
+                onClick={copyAddress} 
+                disabled={!contractAddress} 
+                title="Copy contract address to clipboard"
+                style={{ fontSize: 14, padding: '10px 14px' }}
+              >
+                {copied ? '✓ Copied!' : '📋 Copy'}
+              </button>
               {walletConnected && (
                 <button className="btn btn-secondary" onClick={readState} disabled={loading || !contractAddress} style={{ fontSize: 14, padding: '10px 16px' }}>
                   Load State
