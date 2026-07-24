@@ -60,24 +60,20 @@ export const initializeProviders = async (networkId: string, zkConfigUrl: string
 
   const keyMaterialProvider = new FetchZkConfigProvider(zkConfigUrl, fetch.bind(window));
   
-  // Use root base URL for indexer; indexerPublicDataProvider automatically appends /api/v1/graphql
-  let indexerUri = 'http://localhost:8088';
-  let indexerWsUri = 'ws://localhost:8088';
+  // Exact standalone indexer GraphQL endpoints matching docker-compose
+  let indexerUri = 'http://localhost:8088/api/v1/graphql';
+  let indexerWsUri = 'ws://localhost:8088/api/v1/graphql/ws';
   let proverServerUri = 'http://localhost:6300';
   
   try {
     const remoteConfig = await connectedAPI.getConfiguration();
-    if (remoteConfig && remoteConfig.indexerUri) {
-      indexerUri = remoteConfig.indexerUri.replace(/\/api\/v.*$/, '').replace(/\/graphql$/, '');
-      if (remoteConfig.indexerWsUri) {
-        indexerWsUri = remoteConfig.indexerWsUri.replace(/\/api\/v.*$/, '').replace(/\/graphql\/ws$/, '');
-      }
-      if (remoteConfig.proverServerUri) {
-        proverServerUri = remoteConfig.proverServerUri;
-      }
+    if (remoteConfig) {
+      if (remoteConfig.indexerUri) indexerUri = remoteConfig.indexerUri;
+      if (remoteConfig.indexerWsUri) indexerWsUri = remoteConfig.indexerWsUri;
+      if (remoteConfig.proverServerUri) proverServerUri = remoteConfig.proverServerUri;
     }
   } catch (e: any) {
-    console.warn('Could not fetch config from wallet:', e?.message || e);
+    console.warn('Using default network config:', e?.message || e);
     if (e?.message?.includes('locked') || e?.reason?.includes('locked')) {
       throw new Error('🔒 Your Midnight Lace wallet is locked. Please unlock the extension in Chrome first.');
     }
