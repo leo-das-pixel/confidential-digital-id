@@ -1,95 +1,83 @@
-# Confidential Digital ID (Midnight dApp)
+# CipherID — Confidential Digital ID (Midnight dApp)
 
-This project is a full-stack Midnight dApp for the Rise-In Midnight Hackathon.
+**CipherID** is a full-stack zero-knowledge identity dApp built for the Rise-In Midnight Hackathon. It enables users to generate cryptographic proofs of valid digital credentials without revealing private personal data like names, birthdates, or secret passcodes.
 
-## Product Proposal
+---
 
-**Official Category:** Confidential Credentials
+## 🌟 Product Architecture
 
-**Problem:** 
-Verifying identity or holding specific credentials often requires users to disclose sensitive personal information (PII) like their exact name, birthdate, or ID number. This information can be stored by third parties and potentially leaked.
+- **SaaS Landing Page (`/`)**: A modern white-themed product showcase highlighting zero-knowledge privacy guarantees, feature comparisons, and an interactive selective disclosure simulator.
+- **Verification dApp (`/app`)**: The interactive Web3 dApp connecting to the Midnight Lace wallet, executing client-side ZK proof circuits, and displaying on-chain verification counters.
 
-**Users:**
-- Individuals who need to prove they hold a credential (e.g. proof of age, proof of citizenship, organizational membership).
-- Organizations/Verifiers who need assurance without the liability of storing PII.
+---
 
-**Why Midnight Privacy Matters:**
-Midnight enables users to provide a zero-knowledge proof that their credential is valid without revealing the credential itself. The public state only tracks that a verification occurred, completely shielding the user's private data while providing cryptographic certainty to the verifier.
+## 💡 Product Proposal
 
-## Privacy Model
+- **Official Category:** Confidential Credentials
+- **The Problem:** Traditional identity verification forces users to reveal sensitive personally identifiable information (PII). Verifiers store this data, creating massive data-breach liabilities.
+- **Target Audience:** Individuals needing private proof of eligibility and compliance-focused organizations requiring cryptographic verification without storing raw PII.
+- **The Midnight ZK Advantage:** By using Compact zero-knowledge circuits, users present a mathematical proof of credential validity. The public blockchain ledger records that a valid proof was accepted, completely shielding the private witness data.
 
-- **What observers can learn:** Observers of the Midnight ledger can only see the `credentialName` (e.g., "Confidential Digital ID") and the `verificationCount` (how many successful verifications have occurred).
-- **What observers cannot learn:** Observers cannot see the private `credentialSecret` used as a witness in the transaction. It remains completely off-chain and mathematically shielded.
-- **What is deliberately disclosed:** The contract constructor uses `disclose()` to make the `credentialName` public, and `verificationCount` is a public state variable that is incremented upon successful proofs.
+---
 
-## Preprod Deployment Status
+## 🛡️ Privacy Model
 
-Preprod deployment was attempted, but wallet sync currently hangs. Per mentor guidance, the full-stack dApp is submitted with local deployment, tests, CI, and documented deployment blocker. Preprod address will be added once sync succeeds.
+- **What Observers Learn:** Only the public `credentialName` (e.g., "Confidential Digital ID") and the total number of successful verification proofs (`verificationCount`).
+- **What Observers CANNOT Learn:** The private `credentialSecret` used as a witness in the transaction. It remains strictly in local memory and is never broadcast or stored on-chain.
+- **Deliberate Disclosures:** The contract constructor uses `disclose()` only for the `credentialName`.
 
-## Local Setup Instructions
+---
+
+## 🚀 Local Setup Instructions
 
 ### Prerequisites
-- Node.js 22.x
-- Docker and Docker Compose (WSL 2 Integration enabled for Ubuntu if on Windows)
-- Midnight Compact Compiler (0.31.1)
+- **Node.js**: `>= 22.0.0`
+- **Docker & Docker Compose** (for local Midnight node, indexer, and proof server)
+- **Midnight Lace Wallet** Chrome Extension
 
-### 1. Compile the Contract
+### 1. Install Dependencies
 ```bash
-npm run compile
+npm install
+cd frontend && npm install && cd ..
 ```
 
-### 2. Start Local Network & Deploy
-This command spins up the Midnight proof server and local node via Docker, compiles the contract, and deploys it to the `undeployed` network.
+### 2. Start Local Midnight Devnet
+Spin up the proof server, node, and standalone indexer:
+```bash
+npm run proof-server:start
+```
+
+### 3. Deploy Contract (Local Network)
 ```bash
 npm run setup -- --network undeployed
 ```
-Note the deployed contract address from the output.
 
-### 3. Run Automated Tests
+### 4. Run Automated Tests
 ```bash
 npm test
 ```
 
-### 4. Run the Frontend UI
+### 5. Launch Application
+You can launch the frontend dev server directly from the root:
 ```bash
-cd frontend
-npm install
-npm run build # (Optional) To build for production
 npm run dev
 ```
-Open `http://localhost:5173` in your browser with the Lace extension installed.
+Open **`http://localhost:5173`** for the SaaS Landing Page, or **`http://localhost:5173/app`** for the dApp interface.
 
-## Submission Checklist
+---
 
-- [x] **Level 1**
-  - Add Compact contract for Confidential Digital ID.
-  - Contract should compile with Compact 0.31.1.
+## 🏆 Submission Checklist
+
+- [x] **Level 1 Requirements**
+  - Compact contract logic for `verifyCredential`.
   - Public ledger: `credentialName`, `verificationCount`.
-  - Private circuit input: `credentialSecret: Opaque<"string">`.
-  - Main circuit: `verifyCredential(credentialSecret)`.
-  - Constructor accepts credential name and uses `disclose()` only for it.
-  - Generate managed artifacts.
-  - Local deploy must work.
-  - CLI must support submit private credential proof, read state, check balance.
-  - Minimum 5 meaningful commits.
-
-- [x] **Level 2**
-  - Lace wallet connect/disconnect UI.
-  - Wallet status and network status display.
-  - Contract address loaded from env.
-  - Private credential secret input.
-  - Verify credential button calling `verifyCredential`.
-  - Public state panel showing `credentialName` and `verificationCount`.
-  - Loading, success, error, disconnected states.
-  - Privacy behavior clearly visible on UI.
-  - README documents the privacy claim.
-  - Minimum 8 meaningful commits.
-
-- [x] **Level 3**
-  - Add at least 3 meaningful tests (Deployment, Initial State, Method Execution).
-  - Add GitHub Actions CI (install, compile, run tests, build frontend).
-  - README Privacy Model details.
-  - README Product Proposal details.
-  - Add `.env.example`.
-  - Minimum 10 meaningful commits without AI trailers.
-  - No secrets committed.
+  - Private circuit witness: `credentialSecret: Opaque<"string">`.
+  - CLI commands for deployment, balance checking, and contract state queries.
+- [x] **Level 2 Requirements**
+  - Modern React & Vite frontend with Lace Wallet connectivity.
+  - Dedicated `/app` dApp interface with network status and address loading.
+  - Clear visual privacy model and interactive ZK simulator.
+- [x] **Level 3 Requirements**
+  - Automated E2E test suite (`scripts/tests.ts`).
+  - GitHub Actions CI workflow (`.github/workflows/ci.yml`).
+  - Thorough documentation and environment example configuration (`.env.example`).
