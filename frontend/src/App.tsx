@@ -4,7 +4,7 @@ import { findDeployedContract } from '@midnight-ntwrk/midnight-js-contracts';
 import { CompiledContract } from '@midnight-ntwrk/midnight-js-protocol/compact-js';
 import * as HelloWorld from './managed/hello-world/contract/index.js';
 
-import { Buffer } from 'buffer';
+
 
 const PRIVATE_STATE_ID = 'helloWorldPrivateState';
 
@@ -60,7 +60,7 @@ export default function App() {
       const contractState = await providers.publicDataProvider.queryContractState(contractAddress);
       if (contractState) {
         const ledgerState = HelloWorld.ledger(contractState.data);
-        setCredentialName(Buffer.from(ledgerState.credentialName).toString());
+        setCredentialName(new TextDecoder().decode(Uint8Array.from(ledgerState.credentialName)));
         setVerificationCount(Number(ledgerState.verificationCount));
         setMessage('State refreshed.');
       } else {
