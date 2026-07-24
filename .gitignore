@@ -15,13 +15,8 @@ build/
 .env.test.local
 .env.production.local
 
-# Contract artifacts
-contracts/managed/
-
 # Deployment info
 deployment.json
-
-# Wallet seed (sensitive)
 
 # OS generated files
 .DS_Store
@@ -48,6 +43,7 @@ coverage/
 
 # Private state
 *-state/
+midnight-level-db/
 
 # Temporary files
 tmp/
