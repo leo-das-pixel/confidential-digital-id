@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Use Node.js 22.x
+      uses: actions/setup-node@v3
+      with:
+        node-version: 22.x
+        
+    - name: Install root dependencies
+      run: npm install
+      
+    - name: Download Compact compiler
+      run: |
+        curl -L -o compact.tar.gz https://github.com/midnight-ntwrk/compact/releases/download/v0.31.1/compact-linux-x86_64.tar.gz
+        tar -xzf compact.tar.gz
+        sudo mv compact /usr/local/bin/
+        
+    - name: Compile contract
+      run: npm run compile
+
+    - name: Start Midnight network and Deploy
+      run: npm run setup -- --network undeployed
+      
+    - name: Run Contract Tests
+      run: npm run test
+
+    - name: Frontend build
+      run: |
+        cd frontend
+        npm install
+        npm run build
