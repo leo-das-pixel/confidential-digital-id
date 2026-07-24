@@ -6,6 +6,10 @@ A **Midnight** DApp where users prove they hold a valid digital identity credent
 - **Level 2** — Web frontend with Lace wallet connect + `verifyCredential` circuit call ✅
 - **Level 3** — Tests, CI, privacy model, product proposal, submission checklist ✅
 
+### Screenshots
+![Landing Page](frontend/public/image.png)
+![App Dashboard](frontend/public/app.png)
+
 ---
 
 ## Product Proposal
