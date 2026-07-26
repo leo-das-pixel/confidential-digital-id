@@ -6,6 +6,12 @@ A **Midnight** DApp where users prove they hold a valid digital identity credent
 - **Level 2** — Web frontend with Lace wallet connect + `verifyCredential` circuit call ✅
 - **Level 3** — Tests, CI, privacy model, product proposal, submission checklist ✅
 
+### 📹 Demo Video
+
+Watch the full video walkthrough: **[CipherID — Confidential Digital Identity Demo on YouTube](https://youtu.be/ScmZN5f9Eik)**
+
+---
+
 ### Screenshots
 
 ![Landing Page](frontend/public/landing.png)
