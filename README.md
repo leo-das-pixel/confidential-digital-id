@@ -7,8 +7,16 @@ A **Midnight** DApp where users prove they hold a valid digital identity credent
 - **Level 3** — Tests, CI, privacy model, product proposal, submission checklist ✅
 
 ### Screenshots
-![Landing Page](frontend/public/image.png)
-![App Dashboard](frontend/public/app.png)
+
+![Landing Page](frontend/public/landing.png)
+
+![App Dashboard](frontend/public/dashboard.png)
+
+![Verify Credential](frontend/public/verify.png)
+
+![Verification History](frontend/public/history.png)
+
+![Settings Console](frontend/public/settings.png)
 
 ---
 
@@ -132,15 +140,15 @@ Tear down: `docker compose down -v`.
 
 ## Frontend (Level 2)
 
-A Vite + React + TypeScript SaaS app in [`frontend/`](./frontend) that connects the **Lace (Midnight)** wallet and calls the `verifyCredential` circuit.
+A Vite + React + TypeScript full-screen SaaS app in [`frontend/`](./frontend) that connects the **Lace (Midnight)** wallet and calls the `verifyCredential` circuit.
 
 Features:
-- SaaS Landing Page (`/`) with zero-knowledge feature overview & interactive simulator
-- Dedicated dApp dashboard (`/app`) with Lace wallet connect / disconnect + status display
-- Network + contract address loaded from environment variables
-- Credential secret input (kept private) and a **Verify Credential** button
-- Public state panel showing `credentialName` and `verificationCount`
-- Loading, success (tx id), and error states
+- **Full-bleed SaaS Landing Page (`/`)**: Dark-mode marketing view showcasing zero-knowledge proof mechanics, active network status, and product architecture.
+- **Structured App Shell**: Full-screen SaaS console with navigation across **Dashboard**, **Verify**, **History**, and **Settings**.
+- **Lace Wallet Integration**: Real-time wallet connection, address display, sync state, and network status widget powered by `wallet-context.tsx`.
+- **Zero-Knowledge Verification (`/verify`)**: Circuit execution for confidential credentials with step-by-step state tracking (initiating, proving, submitting, complete).
+- **Public Ledger State (`/dashboard`, `/history`)**: Real-time tracking of public `credentialName` and aggregate `verificationCount`.
+- **Verification History & Settings (`/history`, `/settings`)**: Interactive audit history log and configurable network settings.
 
 ### Run the frontend locally
 
@@ -210,13 +218,14 @@ Compact source: `contracts/hello-world.compact`
 - [x] Product idea documented
 
 ### Level 2 — Frontend & wallet
-- [x] Web UI (`frontend/`) with SaaS Landing Page (`/`) and dApp dashboard (`/app`)
+- [x] Web UI (`frontend/`) rebuilt as full-screen SaaS console with Lace wallet integration
+- [x] Full-bleed SaaS Landing Page and structured App Shell (Dashboard, Verify, History, Settings)
 - [x] Lace wallet connect / disconnect + status
-- [x] Network + contract address from environment variables
-- [x] Credential secret input
-- [x] Verify Credential button calls `verifyCredential`
-- [x] Public state panel (`credentialName`, `verificationCount`)
-- [x] Loading / success / error states
+- [x] Network + contract address from environment variables / configuration
+- [x] Credential secret input (witnessed privately via ZK circuit)
+- [x] Verify Credential button calls `verifyCredential` with live proof status
+- [x] Public state panel (`credentialName`, `verificationCount`) synced with ledger
+- [x] Verification history log & network settings views
 
 ### Level 3 — Tests, CI, polish
 - [x] Automated tests (`npm test`)
@@ -250,8 +259,18 @@ confidential-digital-id/
 │   ├── network.ts  wallet.ts
 ├── scripts/
 │   └── tests.ts                   # E2E test suite (Level 3)
-├── frontend/                      # Level 2 web app (Vite + React + SaaS UI)
-│   ├── src/ (pages/, components/, App.tsx, midnight.ts)
+├── frontend/                      # Level 2 web app (Vite + React + SaaS Console UI)
+│   ├── src/
+│   │   ├── components/            # UI & App Shell components (layout, nav, widgets)
+│   │   ├── pages/                 # LandingPage, DashboardPage, VerifyPage, HistoryPage, SettingsPage
+│   │   ├── lib/                   # Utilities and helper functions
+│   │   ├── wallet-context.tsx     # Lace wallet context & hook
+│   │   ├── midnight.ts            # Midnight contract & wallet API integration
+│   │   ├── config.ts              # Network & deployment configuration
+│   │   ├── contract.ts            # Compact contract state & proof execution
+│   │   ├── App.tsx                # App shell router & tab switcher
+│   │   └── index.css              # Custom CSS design system & Tailwind setup
+│   ├── public/                    # Console screenshots & public assets
 │   ├── .env.example
 │   └── package.json
 ├── .github/workflows/ci.yml       # Level 3 CI

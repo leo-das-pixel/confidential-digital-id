@@ -1,111 +1,110 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import 'tailwindcss';
 
 :root {
-  --primary: #4f46e5;
-  --primary-hover: #4338ca;
-  --primary-light: #eef2ff;
-  --text-main: #0f172a;
-  --text-muted: #64748b;
-  --bg-main: #ffffff;
-  --bg-secondary: #f8fafc;
-  --border-color: #e2e8f0;
-  --card-bg: #ffffff;
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-  --font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  --canvas: #f1f3f6;
+  --paper: #ffffff;
+  --surface: #e8ecf1;
+  --ink: #111827;
+  --ink-soft: #1f2937;
+  --ink-muted: #4b5563;
+  --ink-faint: #9ca3af;
+  --line: #d5dbe3;
+  --accent: #9f1239;
+  --accent-deep: #881337;
+  --accent-soft: #fce7f3;
+  --ok: #047857;
+  --ok-soft: #d1fae5;
+  --warn: #b45309;
+  --warn-soft: #ffedd5;
+  --danger: #be123c;
+  --danger-soft: #ffe4e6;
+  --radius: 0.5rem;
+  --font-display: 'Sora', 'Segoe UI', sans-serif;
+  --font-body: 'DM Sans', 'Segoe UI', sans-serif;
+  --shell-w: 16rem;
+}
+
+@theme inline {
+  --font-sans: var(--font-body);
+  --font-display: var(--font-display);
 }
 
 * {
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100%;
 }
 
 body {
-  font-family: var(--font-family);
-  background-color: var(--bg-secondary);
-  color: var(--text-main);
-  line-height: 1.6;
+  margin: 0;
+  min-height: 100vh;
+  color: var(--ink);
+  font-family: var(--font-body);
+  background: var(--canvas);
   -webkit-font-smoothing: antialiased;
 }
 
-#root {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-/* Common Container */
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 24px;
-}
-
-/* Buttons */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 12px 24px;
-  font-size: 15px;
+.font-display {
+  font-family: var(--font-display);
   font-weight: 600;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  text-decoration: none;
-  border: none;
+  letter-spacing: -0.03em;
 }
 
-.btn-primary {
-  background-color: var(--primary);
-  color: #ffffff;
-  box-shadow: 0 4px 14px 0 rgba(79, 70, 229, 0.39);
+.hero-wash {
+  background:
+    radial-gradient(ellipse 90% 80% at 85% 20%, rgba(159, 18, 57, 0.45), transparent 55%),
+    radial-gradient(ellipse 50% 60% at 10% 90%, rgba(255, 255, 255, 0.06), transparent 50%),
+    linear-gradient(155deg, #0b0f16 0%, #1a1520 48%, #4c0519 100%);
 }
 
-.btn-primary:hover {
-  background-color: var(--primary-hover);
-  transform: translateY(-1px);
+.hero-grid {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: linear-gradient(180deg, black 30%, transparent 100%);
 }
 
-.btn-secondary {
-  background-color: var(--bg-main);
-  color: var(--text-main);
-  border: 1px solid var(--border-color);
+.slide-up {
+  animation: slide-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-.btn-secondary:hover {
-  background-color: var(--bg-secondary);
-  border-color: #cbd5e1;
+.fade-in {
+  animation: fade-in 0.9s ease both;
 }
 
-/* Badges */
-.badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 4px 12px;
-  border-radius: 9999px;
-  font-size: 13px;
-  font-weight: 500;
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.badge-primary {
-  background-color: var(--primary-light);
-  color: var(--primary);
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
-.badge-success {
-  background-color: #dcfce7;
-  color: #15803d;
-}
-
-/* Animations */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.animate-fade-in {
-  animation: fadeIn 0.5s ease-out forwards;
+@media (prefers-reduced-motion: reduce) {
+  .slide-up,
+  .fade-in {
+    animation: none;
+  }
 }
