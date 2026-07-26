@@ -12,8 +12,8 @@ import { httpClientProofProvider } from '@midnight-ntwrk/midnight-js-http-client
 import { indexerPublicDataProvider } from '@midnight-ntwrk/midnight-js-indexer-public-data-provider';
 import { levelPrivateStateProvider } from '@midnight-ntwrk/midnight-js-level-private-state-provider';
 import { NodeZkConfigProvider } from '@midnight-ntwrk/midnight-js-node-zk-config-provider';
-import { resolveNetwork, getOrCreateSeed } from '../src/network';
-import { createWallet } from '../src/wallet';
+import { resolveNetwork, getOrCreateSeed } from '../cipherid-cli/src/network';
+import { createWallet } from '../cipherid-cli/src/wallet';
 import { CompiledContract } from '@midnight-ntwrk/midnight-js-protocol/compact-js';
 
 // @ts-expect-error wallet sync requires WebSocket
@@ -32,7 +32,14 @@ async function main() {
   console.log('--- Starting Tests ---');
   
   const __dirname = path.dirname(fileURLToPath(import.meta.url));
-  const zkConfigPath = path.resolve(__dirname, '..', 'contracts', 'managed', 'hello-world');
+  const zkConfigPath = path.resolve(
+    __dirname,
+    '..',
+    'contract',
+    'src',
+    'managed',
+    'hello-world',
+  );
   const contractPath = path.join(zkConfigPath, 'contract', 'index.js');
   if (!fs.existsSync(contractPath)) throw new Error('Compiled contract missing');
   

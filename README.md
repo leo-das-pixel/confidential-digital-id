@@ -14,15 +14,15 @@ Watch the full video walkthrough: **[CipherID — Confidential Digital Identity 
 
 ### Screenshots
 
-![Landing Page](frontend/public/landing.png)
+![Landing Page](cipherid-ui/public/landing.png)
 
-![App Dashboard](frontend/public/dashboard.png)
+![App Dashboard](cipherid-ui/public/dashboard.png)
 
-![Verify Credential](frontend/public/verify.png)
+![Verify Credential](cipherid-ui/public/verify.png)
 
-![Verification History](frontend/public/history.png)
+![Verification History](cipherid-ui/public/history.png)
 
-![Settings Console](frontend/public/settings.png)
+![Settings Console](cipherid-ui/public/settings.png)
 
 ---
 
@@ -51,7 +51,7 @@ What an on-chain observer (indexer, explorer, validator) **can** and **cannot** 
 | That a verification transaction occurred | Any link between a verification and a specific person |
 | The ZK proof is valid | The witness data used to build the proof |
 
-How it is enforced in `contracts/hello-world.compact`:
+How it is enforced in `contract/src/hello-world.compact`:
 
 - `credentialName` is written with `disclose(name)` — it is **intentionally** public.
 - `secret` is an `Opaque<"string">` **circuit input** used only inside the `verifyCredential` proof. It is **never** passed to `disclose()` and is **never** stored in a ledger field.
@@ -81,8 +81,7 @@ On WSL, work from the native Linux filesystem (e.g. `~/midnight-projects/...`) o
 ## Install
 
 ```bash
-npm install            # backend (contract, deploy, CLI, tests)
-cd frontend && npm install # frontend (Vite + React)
+npm install            # installs all workspaces (contract, api, cli, ui)
 ```
 
 ## Compile
@@ -91,7 +90,7 @@ cd frontend && npm install # frontend (Vite + React)
 npm run compile
 ```
 
-Runs `compact compile contracts/hello-world.compact contracts/managed/hello-world`. Output lands in `contracts/managed/hello-world/` (JS bindings, ZKIR, keys, circuit metadata).
+Runs `compact compile contract/src/hello-world.compact contract/src/managed/hello-world`. Output lands in `contract/src/managed/hello-world/` (JS bindings, ZKIR, keys, circuit metadata).
 
 ## Test
 
@@ -146,7 +145,7 @@ Tear down: `docker compose down -v`.
 
 ## Frontend (Level 2)
 
-A Vite + React + TypeScript full-screen SaaS app in [`frontend/`](./frontend) that connects the **Lace (Midnight)** wallet and calls the `verifyCredential` circuit.
+A Vite + React + TypeScript full-screen SaaS app in [`cipherid-ui/`](./cipherid-ui) that connects the **Lace (Midnight)** wallet and calls the `verifyCredential` circuit.
 
 Features:
 - **Full-bleed SaaS Landing Page (`/`)**: Dark-mode marketing view showcasing zero-knowledge proof mechanics, active network status, and product architecture.
@@ -156,18 +155,18 @@ Features:
 - **Public Ledger State (`/dashboard`, `/history`)**: Real-time tracking of public `credentialName` and aggregate `verificationCount`.
 - **Verification History & Settings (`/history`, `/settings`)**: Interactive audit history log and configurable network settings.
 
-### Run the frontend locally
+### Run the UI locally
 
 From the project root:
 
 ```bash
-npm run dev       # Launches frontend at http://localhost:5173
+npm run dev       # Launches CipherID UI at http://localhost:5173
 ```
 
-Or from `frontend/`:
+Or from `cipherid-ui/`:
 
 ```bash
-cd frontend
+cd cipherid-ui
 npm run dev
 ```
 
@@ -175,7 +174,7 @@ npm run dev
 
 ## Contract overview
 
-Compact source: `contracts/hello-world.compact`
+Compact source: `contract/src/hello-world.compact`
 
 - **Constructor** `name` → sets public `credentialName` via `disclose(name)`
 - **Circuit** `verifyCredential(secret)` → private opaque secret; increments public `verificationCount`
@@ -196,7 +195,7 @@ Compact source: `contracts/hello-world.compact`
 
 1. Install Node 22 + dependencies.
 2. Verify contract compilation and pre-compiled managed artifacts.
-3. Type-check backend and build frontend (`npm run build`).
+3. Type-check backend and build UI (`npm run build`).
 
 ---
 
@@ -224,7 +223,7 @@ Compact source: `contracts/hello-world.compact`
 - [x] Product idea documented
 
 ### Level 2 — Frontend & wallet
-- [x] Web UI (`frontend/`) rebuilt as full-screen SaaS console with Lace wallet integration
+- [x] Web UI (`cipherid-ui/`) rebuilt as full-screen SaaS console with Lace wallet integration
 - [x] Full-bleed SaaS Landing Page and structured App Shell (Dashboard, Verify, History, Settings)
 - [x] Lace wallet connect / disconnect + status
 - [x] Network + contract address from environment variables / configuration
@@ -235,7 +234,7 @@ Compact source: `contracts/hello-world.compact`
 
 ### Level 3 — Tests, CI, polish
 - [x] Automated tests (`npm test`)
-- [x] GitHub Actions CI (compile + tests + typecheck + frontend build)
+- [x] GitHub Actions CI (compile + tests + typecheck + UI build)
 - [x] Privacy Model section
 - [x] Product Proposal (category: Confidential Credentials)
 - [x] This submission checklist
@@ -247,40 +246,31 @@ Compact source: `contracts/hello-world.compact`
 
 | Script | Description |
 | --- | --- |
-| `npm run compile` | Compile Compact → `contracts/managed/hello-world/` |
+| `npm run compile` | Compile Compact → `contract/src/managed/hello-world/` |
 | `npm test` | Run test suite in `scripts/tests.ts` |
 | `npm run setup` | Start proof stack, compile, and deploy |
 | `npm run deploy` | Deploy compiled contract |
 | `npm run cli` | Verify credential / read public state |
-| `npm run dev` | Run frontend dev server from root |
+| `npm run dev` | Run CipherID UI dev server from root |
 
 ## Project structure
 
 ```
 confidential-digital-id/
-├── contracts/
-│   └── hello-world.compact        # Confidential Digital ID (Compact logic)
-├── src/                           # deploy, cli, wallet, network (Level 1)
-│   ├── setup.ts  deploy.ts  cli.ts
-│   ├── network.ts  wallet.ts
-├── scripts/
-│   └── tests.ts                   # E2E test suite (Level 3)
-├── frontend/                      # Level 2 web app (Vite + React + SaaS Console UI)
-│   ├── src/
-│   │   ├── components/            # UI & App Shell components (layout, nav, widgets)
-│   │   ├── pages/                 # LandingPage, DashboardPage, VerifyPage, HistoryPage, SettingsPage
-│   │   ├── lib/                   # Utilities and helper functions
-│   │   ├── wallet-context.tsx     # Lace wallet context & hook
-│   │   ├── midnight.ts            # Midnight contract & wallet API integration
-│   │   ├── config.ts              # Network & deployment configuration
-│   │   ├── contract.ts            # Compact contract state & proof execution
-│   │   ├── App.tsx                # App shell router & tab switcher
-│   │   └── index.css              # Custom CSS design system & Tailwind setup
-│   ├── public/                    # Console screenshots & public assets
-│   ├── .env.example
-│   └── package.json
-├── .github/workflows/ci.yml       # Level 3 CI
+├── contract/                      # Compact contract + managed ZK artifacts
+│   └── src/
+│       ├── hello-world.compact
+│       ├── witnesses.ts
+│       ├── index.ts
+│       └── managed/hello-world/
+├── api/                           # Shared types/utils for CLI + UI
+├── cipherid-cli/                  # Deploy, CLI, wallet, network
+│   └── src/
+├── cipherid-ui/                   # Vite + React SaaS console (CipherID)
+│   └── src/
+├── scripts/                       # tests + e2e checks
+├── .github/workflows/ci.yml
 ├── docker-compose.yml
-├── package.json
+├── package.json                   # npm workspaces root
 └── README.md
 ```

@@ -1,11 +1,12 @@
 {
-  "name": "frontend",
+  "name": "@midnight-ntwrk/cipherid-ui",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && npm run copy:zk",
+    "copy:zk": "node ./scripts/copy-zk-assets.mjs",
     "lint": "oxlint",
     "preview": "vite preview"
   },

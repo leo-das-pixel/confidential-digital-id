@@ -31,7 +31,15 @@ const { network, config: networkConfig } = resolveNetwork();
 const SEED = getOrCreateSeed(network);
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const zkConfigPath = path.resolve(__dirname, '..', 'contracts', 'managed', 'hello-world');
+const zkConfigPath = path.resolve(
+  __dirname,
+  '..',
+  '..',
+  'contract',
+  'src',
+  'managed',
+  'hello-world',
+);
 
 // Load compiled contract
 const contractPath = path.join(zkConfigPath, 'contract', 'index.js');

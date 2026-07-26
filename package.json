@@ -2,23 +2,32 @@
   "name": "confidential-digital-id",
   "version": "1.0.0",
   "type": "module",
-  "description": "A Midnight Network application created with create-mn-app",
+  "description": "CipherID — confidential digital credentials on Midnight",
   "author": "",
   "license": "MIT",
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "cipherid-cli",
+      "cipherid-ui",
+      "api",
+      "contract"
+    ]
+  },
   "scripts": {
-    "compile": "compact compile contracts/hello-world.compact contracts/managed/hello-world",
-    "build": "npx tsc --noEmit || true",
-    "setup": "npx tsx src/setup.ts",
-    "deploy": "npx tsx src/deploy.ts",
-    "cli": "npx tsx src/cli.ts",
-    "check-balance": "npx tsx src/check-balance.ts",
-    "network": "npx tsx src/network.ts",
+    "compile": "npm run compact --workspace=@midnight-ntwrk/cipherid-contract",
+    "build": "npm run build --workspace=@midnight-ntwrk/cipherid-ui",
+    "setup": "npx tsx cipherid-cli/src/setup.ts",
+    "deploy": "npx tsx cipherid-cli/src/deploy.ts",
+    "cli": "npx tsx cipherid-cli/src/cli.ts",
+    "check-balance": "npx tsx cipherid-cli/src/check-balance.ts",
+    "network": "npx tsx cipherid-cli/src/network.ts",
     "proof-server:start": "docker compose up -d",
     "proof-server:stop": "docker compose down",
-    "clean": "rm -rf contracts/managed .midnight-state.json .midnight-wallet-state",
+    "clean": "rm -rf contract/src/managed .midnight-state.json .midnight-wallet-state",
     "test": "tsx scripts/tests.ts",
     "test:e2e": "tsx scripts/e2e-check.ts",
-    "dev": "npm run dev --prefix frontend"
+    "dev": "npm run dev --workspace=@midnight-ntwrk/cipherid-ui"
   },
   "dependencies": {
     "@midnight-ntwrk/compact-runtime": "0.16.0",

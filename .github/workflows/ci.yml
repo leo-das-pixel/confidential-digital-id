@@ -9,18 +9,18 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     steps:
     - uses: actions/checkout@v3
-    
+
     - name: Use Node.js 22.x
       uses: actions/setup-node@v3
       with:
         node-version: 22.x
-        
-    - name: Install root dependencies
+
+    - name: Install workspace dependencies
       run: npm install
-      
+
     - name: Compile contract
       run: |
         if command -v compact >/dev/null 2>&1; then
@@ -29,8 +29,5 @@ jobs:
           echo "Using pre-compiled managed contract artifacts."
         fi
 
-    - name: Frontend build
-      run: |
-        cd frontend
-        npm install
-        npm run build
+    - name: UI build
+      run: npm run build --workspace=@midnight-ntwrk/cipherid-ui
