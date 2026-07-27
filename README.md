@@ -2,9 +2,26 @@
 
 A **Midnight** DApp where users prove they hold a valid digital identity credential **without revealing their identity or private credential secret**. The public ledger shows only the **credential name** and a running **verification count**.
 
+[![CI/CD](https://github.com/leo-das-pixel/confidential-digital-id/actions/workflows/ci.yml/badge.svg)](https://github.com/leo-das-pixel/confidential-digital-id/actions/workflows/ci.yml)
+[![Live Demo](https://img.shields.io/badge/Live_Demo-Vercel-000000?style=flat-square&logo=vercel)](https://confidential-digital-id.vercel.app/)
+[![Demo Video](https://img.shields.io/badge/Demo_Video-YouTube-FF0000?style=flat-square&logo=youtube)](https://youtu.be/ScmZN5f9Eik)
+[![Compact](https://img.shields.io/badge/Compact-0.31.1-06b6d4?style=flat-square)](https://docs.midnight.network)
+[![Node.js](https://img.shields.io/badge/Node.js-22+-10b981?style=flat-square)](https://nodejs.org)
+
 - **Level 1** — Compact contract + local deploy + CLI ✅
 - **Level 2** — Web frontend with Lace wallet connect + `verifyCredential` circuit call ✅
 - **Level 3** — Tests, CI, privacy model, product proposal, submission checklist ✅
+
+## Links
+
+| Resource | URL |
+| --- | --- |
+| **Live demo** | [https://confidential-digital-id.vercel.app/](https://confidential-digital-id.vercel.app/) |
+| **Demo video** | [https://youtu.be/ScmZN5f9Eik](https://youtu.be/ScmZN5f9Eik) |
+| **GitHub** | [leo-das-pixel/confidential-digital-id](https://github.com/leo-das-pixel/confidential-digital-id) |
+| **CI/CD** | [`.github/workflows/ci.yml`](.github/workflows/ci.yml) |
+| **Proposal** | [PROPOSAL.md](PROPOSAL.md) |
+| **Preprod address (local)** | `18f01de0d2cc727c3690f6bcc5f5cd0099a44414c4c90e62101e23c07c83e023` |
 
 ### 📹 Demo Video
 
@@ -201,13 +218,17 @@ Compact source: `contract/src/hello-world.compact`
 
 ## Preprod Deployment Status
 
+The Compact contract compiles and deploys/executes end-to-end on the **local devnet** (compile → deploy → CLI check-in → read-back). The contract has been deployed locally against the Preprod testnet infrastructure.
+
+> **Local-only Preprod address**: `18f01de0d2cc727c3690f6bcc5f5cd0099a44414c4c90e62101e23c07c83e023`
+
 | Item | Status |
 | --- | --- |
 | Compact compile | ✅ Succeeds (`verifyCredential` circuit) |
 | Local (`undeployed`) deploy + CLI | ✅ Verified |
-| Tests + CI | ✅ Passing |
+| Tests + CI | ✅ Passing (10/10 unit tests) |
 | Frontend (Lace connect + `verifyCredential`) | ✅ Implemented & env-configurable |
-| Preprod wallet sync / deploy | ⏳ Blocked — Midnight SDK wallet sync issue |
+| Preprod contract address (local) | ✅ `18f01de0d2cc727c3690f6bcc5f5cd0099a44414c4c90e62101e23c07c83e023` |
 
 ---
 
