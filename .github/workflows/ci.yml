@@ -29,5 +29,8 @@ jobs:
           echo "Using pre-compiled managed contract artifacts."
         fi
 
+    - name: Run test suite
+      run: npm test
+
     - name: UI build
       run: npm run build --workspace=@midnight-ntwrk/cipherid-ui
