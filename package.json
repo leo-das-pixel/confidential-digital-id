@@ -25,7 +25,8 @@
     "proof-server:start": "docker compose up -d",
     "proof-server:stop": "docker compose down",
     "clean": "rm -rf contract/src/managed .midnight-state.json .midnight-wallet-state",
-    "test": "tsx scripts/tests.ts",
+    "test": "npx tsx --test tests/*.test.ts",
+    "test:integration": "tsx scripts/tests.ts",
     "test:e2e": "tsx scripts/e2e-check.ts",
     "dev": "npm run dev --workspace=@midnight-ntwrk/cipherid-ui"
   },
