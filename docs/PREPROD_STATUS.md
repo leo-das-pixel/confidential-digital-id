@@ -33,4 +33,7 @@ Deployed **2026-07-31** via **1AM** (wallet auto-connected, sponsored DUST).
 | `VITE_CONTRACT_ADDRESS` | `373815d6936cadddb6f5a89438ed6c72964793da23452149b1ec3c3a5f7b49f8` |
 | `VITE_INDEXER_URI` | `https://indexer.preprod.midnight.network/api/v4/graphql` |
 | `VITE_INDEXER_WS_URI` | `wss://indexer.preprod.midnight.network/api/v4/graphql/ws` |
-| `VITE_PROOF_SERVER_URL` | `https://proof-server.preprod.midnight.network` |
+| `VITE_PROOF_SERVER_URL` | `https://confidential-digital-id.netlify.app/proof-server` |
+
+> **CORS:** Do **not** set `VITE_PROOF_SERVER_URL` to `https://proof-server.preprod.midnight.network` for the Netlify site — the browser is blocked. Use the `/proof-server` proxy from `netlify.toml` instead (or leave the remote URL; production code rewrites it to `${origin}/proof-server`).
+

@@ -126,6 +126,15 @@ export async function initializeProviders(networkId: string, zkConfigUrl: string
     }
   }
 
+  // Remote Preprod proof server blocks browser CORS. On Netlify/production, use same-origin proxy.
+  if (
+    typeof window !== 'undefined' &&
+    import.meta.env.PROD &&
+    /proof-server\.preprod\.midnight\.network/i.test(proverServerUri)
+  ) {
+    proverServerUri = `${window.location.origin}/proof-server`;
+  }
+
   let shieldedAddresses: {
     shieldedAddress?: string;
     shieldedCoinPublicKey: string;

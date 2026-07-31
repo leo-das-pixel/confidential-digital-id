@@ -111,7 +111,7 @@ Faucet (if needed for Lace path): [https://midnight-tmnight-preprod.nethermind.d
 | `VITE_CONTRACT_ADDRESS` | Published Preprod hex (empty until first deploy) |
 | `VITE_INDEXER_URI` | `https://indexer.preprod.midnight.network/api/v4/graphql` |
 | `VITE_INDEXER_WS_URI` | `wss://indexer.preprod.midnight.network/api/v4/graphql/ws` |
-| `VITE_PROOF_SERVER_URL` | Local `http://127.0.0.1:6300` for browser deploy; remote for Netlify |
+| `VITE_PROOF_SERVER_URL` | `https://confidential-digital-id.netlify.app/proof-server` (same-origin proxy — remote Preprod URL is blocked by CORS in the browser) |
 
 ### Local undeployed (optional)
 
@@ -142,7 +142,7 @@ npm run dev
 | `VITE_CONTRACT_ADDRESS` | `373815d6936cadddb6f5a89438ed6c72964793da23452149b1ec3c3a5f7b49f8` |
 | `VITE_INDEXER_URI` | `https://indexer.preprod.midnight.network/api/v4/graphql` |
 | `VITE_INDEXER_WS_URI` | `wss://indexer.preprod.midnight.network/api/v4/graphql/ws` |
-| `VITE_PROOF_SERVER_URL` | `https://proof-server.preprod.midnight.network` |
+| `VITE_PROOF_SERVER_URL` | `https://confidential-digital-id.netlify.app/proof-server` |
 
 ---
 
