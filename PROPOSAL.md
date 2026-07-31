@@ -3,7 +3,7 @@
 > **Zero-Knowledge Privacy-Preserving Identity Verification on the Midnight Network**
 
 [![CI/CD](https://github.com/leo-das-pixel/confidential-digital-id/actions/workflows/ci.yml/badge.svg)](https://github.com/leo-das-pixel/confidential-digital-id/actions/workflows/ci.yml)
-[![Live Demo](https://img.shields.io/badge/Live_Demo-Vercel-000000?style=flat-square&logo=vercel)](https://confidential-digital-id.vercel.app/)
+[![Live Demo](https://img.shields.io/badge/Live_Demo-Netlify-00C7B7?style=flat-square&logo=netlify)](https://confidential-digital-id.netlify.app/)
 [![Demo Video](https://img.shields.io/badge/Demo_Video-YouTube-FF0000?style=flat-square&logo=youtube)](https://youtu.be/ScmZN5f9Eik)
 [![Compact](https://img.shields.io/badge/Compact-0.31.1-06b6d4?style=flat-square)](https://docs.midnight.network)
 
@@ -74,8 +74,8 @@ export circuit verifyCredential(credentialSecret: Opaque<"string">): [] {
 ## Deployment & Verification
 
 - **Network**: Midnight Preprod Testnet
-- **Local Preprod Address**: `18f01de0d2cc727c3690f6bcc5f5cd0099a44414c4c90e62101e23c07c83e023`
-- **Live Frontend**: [confidential-digital-id.vercel.app](https://confidential-digital-id.vercel.app/)
+- **Preprod Contract**: `373815d6936cadddb6f5a89438ed6c72964793da23452149b1ec3c3a5f7b49f8`
+- **Live Frontend**: [confidential-digital-id.netlify.app](https://confidential-digital-id.netlify.app/)
 - **Demo Video**: [YouTube](https://youtu.be/ScmZN5f9Eik)
 
 ---
@@ -95,7 +95,7 @@ export circuit verifyCredential(credentialSecret: Opaque<"string">): [] {
 - [x] 10 unit tests passing (`npm test`) covering privacy invariants, state round-trips, and network resolution
 - [x] GitHub Actions CI (`ci.yml`) compiling, testing, type-checking, and building on every push
 - [x] Local Preprod contract address published: `18f01de0d2cc727c3690f6bcc5f5cd0099a44414c4c90e62101e23c07c83e023`
-- [x] Full-stack web frontend live on Vercel with Lace wallet integration
+- [x] Full-stack web frontend live on Netlify with wallet integration (1AM / Lace)
 - [x] Privacy model documented and enforced in contract
 - [x] Demo video available: [YouTube](https://youtu.be/ScmZN5f9Eik)
 - [x] Product proposal (this document)

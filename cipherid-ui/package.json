@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:preprod": "vite --mode preprod",
     "build": "tsc -b && vite build && npm run copy:zk",
     "copy:zk": "node ./scripts/copy-zk-assets.mjs",
     "lint": "oxlint",

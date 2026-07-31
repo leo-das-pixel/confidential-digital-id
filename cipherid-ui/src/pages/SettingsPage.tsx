@@ -13,9 +13,12 @@ export function SettingsPage() {
     config,
     providers,
     connecting,
+    deploying,
+    deployError,
     laceInstalled,
     connect,
     disconnect,
+    deploy,
     walletError,
     refreshPublicState,
     setContractAddress,
@@ -23,6 +26,7 @@ export function SettingsPage() {
   } = useWallet();
 
   const [addressDraft, setAddressDraft] = useState(config.contractAddress ?? '');
+  const [credentialName, setCredentialName] = useState('Confidential Digital ID');
 
   useEffect(() => {
     setAddressDraft(config.contractAddress ?? '');
@@ -34,18 +38,52 @@ export function SettingsPage() {
     void refreshPublicState();
   };
 
+  const onDeploy = async () => {
+    const address = await deploy(credentialName.trim() || undefined);
+    if (address) setAddressDraft(address);
+  };
+
   return (
     <div>
       <PageHeader
         title="Settings"
-        description="Contract, network endpoints, and Lace for this CipherID workspace."
+        description="Deploy with 1AM on Preprod, paste an address, or tune network endpoints."
       />
 
       <div className="grid gap-3 lg:grid-cols-2">
         <Surface>
+          <h2 className="font-display text-lg">Deploy credential contract</h2>
+          <p className="mt-2 text-sm text-[var(--ink-muted)]">
+            Prefer <strong>1AM</strong> on Preprod (sponsored DUST). Unlock the wallet, wait until
+            synced, then Deploy. ZK proving often takes 2–5+ minutes — approve the wallet popup when
+            it appears.
+          </p>
+          <div className="mt-4 space-y-3">
+            <Input
+              value={credentialName}
+              onChange={(e) => setCredentialName(e.target.value)}
+              placeholder="Public credential name"
+              spellCheck={false}
+            />
+            <Button
+              type="button"
+              variant="accent"
+              onClick={() => void onDeploy()}
+              disabled={!providers || deploying}
+            >
+              {deploying ? 'Deploying (proving)…' : 'Deploy on Preprod'}
+            </Button>
+            {!providers ? (
+              <p className="text-sm text-[var(--ink-faint)]">Connect a wallet first.</p>
+            ) : null}
+            {deployError ? <p className="text-sm text-[var(--danger)]">{deployError}</p> : null}
+          </div>
+        </Surface>
+
+        <Surface>
           <h2 className="font-display text-lg">Contract address</h2>
           <p className="mt-2 text-sm text-[var(--ink-muted)]">
-            Paste the deployed address. Saved in this browser and applied immediately.
+            Paste a deployed address (or use Deploy). Saved in this browser and applied immediately.
           </p>
           <form onSubmit={onSave} className="mt-4 space-y-3">
             <Input
@@ -100,14 +138,14 @@ export function SettingsPage() {
 
         <Surface>
           <div className="flex items-center justify-between gap-3">
-            <h2 className="font-display text-lg">Lace wallet</h2>
+            <h2 className="font-display text-lg">Midnight wallet</h2>
             <Badge tone={providers ? 'ok' : laceInstalled ? 'warn' : 'danger'}>
               {providers ? 'Connected' : laceInstalled ? 'Detected' : 'Missing'}
             </Badge>
           </div>
           <p className="mt-3 text-sm text-[var(--ink-muted)]">
-            Auto-connects on load when Lace is available. Disconnecting disables auto-connect until
-            you connect again. Unlock Lace before connecting.
+            Prefers <strong>1AM</strong> when both wallets are installed. Set network to{' '}
+            <strong>Preprod</strong> to match the app. Unlock before connecting.
           </p>
           {providers ? (
             <div className="mt-4 space-y-3">
@@ -127,7 +165,7 @@ export function SettingsPage() {
             <div className="mt-4 flex flex-wrap gap-2">
               {laceInstalled ? (
                 <Button variant="accent" onClick={() => void connect()} disabled={connecting}>
-                  {connecting ? 'Connecting…' : 'Connect Lace'}
+                  {connecting ? 'Connecting…' : 'Connect wallet'}
                 </Button>
               ) : (
                 <a

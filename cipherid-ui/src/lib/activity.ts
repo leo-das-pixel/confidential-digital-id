@@ -1,6 +1,9 @@
 export type ActivityKind =
   | 'wallet_connect'
   | 'wallet_disconnect'
+  | 'deploy_attempt'
+  | 'deploy_success'
+  | 'deploy_error'
   | 'verify_attempt'
   | 'verify_success'
   | 'verify_error'

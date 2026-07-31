@@ -54,8 +54,8 @@ export function DashboardPage() {
             {providers
               ? shortAddr(providers.addressLabel, 14, 8)
               : laceInstalled
-                ? 'Lace detected'
-                : 'Lace missing'}
+                ? 'Wallet detected'
+                : 'Install 1AM or Lace'}
           </p>
         </Surface>
         <Surface>
@@ -101,7 +101,7 @@ export function DashboardPage() {
             <div>
               <h2 className="font-display text-lg">Contract</h2>
               <p className="mt-1 break-all font-mono text-xs text-[var(--ink-muted)]">
-                {config.contractAddress ?? 'Not set — open Settings'}
+                {config.contractAddress ?? 'Not set — Deploy in Settings with 1AM'}
               </p>
             </div>
             <Badge tone="neutral">Config</Badge>

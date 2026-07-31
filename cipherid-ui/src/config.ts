@@ -21,12 +21,13 @@ function orNull(v: string | undefined | null): string | null {
 }
 
 function envConfig(): AppConfig {
+  const fallback = import.meta.env.PROD ? 'preprod' : 'undeployed';
   const rawNetwork = (
     import.meta.env.VITE_NETWORK_ID ??
     import.meta.env.VITE_NETWORK ??
-    'undeployed'
+    fallback
   ).trim();
-  const network: NetworkId = isNetworkId(rawNetwork) ? rawNetwork : 'undeployed';
+  const network: NetworkId = isNetworkId(rawNetwork) ? rawNetwork : (fallback as NetworkId);
   return {
     network,
     contractAddress: orNull(import.meta.env.VITE_CONTRACT_ADDRESS),
