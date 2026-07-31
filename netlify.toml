@@ -3,14 +3,14 @@
   command = "npm run build"
   publish = "dist"
 
-# Browser → same-origin /proof-server/* (avoids CORS on proof-server.preprod.midnight.network)
+# Same-origin proof-server proxy (must win over SPA fallback).
+# Also mirrored in cipherid-ui/public/_redirects so it ships in dist.
 [[redirects]]
   from = "/proof-server/*"
   to = "https://proof-server.preprod.midnight.network/:splat"
   status = 200
   force = true
 
-# SPA fallback (must be last)
 [[redirects]]
   from = "/*"
   to = "/index.html"
