@@ -75,8 +75,10 @@ export circuit verifyCredential(credentialSecret: Opaque<"string">): [] {
 
 - **Network**: Midnight Preprod Testnet
 - **Preprod Contract**: `373815d6936cadddb6f5a89438ed6c72964793da23452149b1ec3c3a5f7b49f8`
+- **Sample verify tx**: `0001334e8e879bb892abe4407d16abcebdf9e1eb29d150029c56c9abeac6c28fec`
 - **Live Frontend**: [confidential-digital-id.netlify.app](https://confidential-digital-id.netlify.app/)
 - **Demo Video**: [YouTube](https://youtu.be/ScmZN5f9Eik)
+- **Wallet path**: Verified with **1AM** on Preprod (deploy + verify)
 
 ---
 
