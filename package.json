@@ -23,6 +23,7 @@
     "check-balance": "npx tsx cipherid-cli/src/check-balance.ts",
     "network": "npx tsx cipherid-cli/src/network.ts",
     "proof-server:start": "docker compose up -d",
+    "proof-server:preview": "docker compose -f proof-server-local.yml up -d",
     "proof-server:preprod": "docker compose -f proof-server-local.yml up -d",
     "proof-server:stop": "docker compose down",
     "clean": "rm -rf contract/src/managed .midnight-state.json .midnight-wallet-state",
@@ -30,6 +31,7 @@
     "test:integration": "tsx scripts/tests.ts",
     "test:e2e": "tsx scripts/e2e-check.ts",
     "dev": "npm run dev --workspace=@midnight-ntwrk/cipherid-ui",
+    "dev:preview": "npm run dev:preview --workspace=@midnight-ntwrk/cipherid-ui",
     "dev:preprod": "npm run dev:preprod --workspace=@midnight-ntwrk/cipherid-ui"
   },
   "dependencies": {

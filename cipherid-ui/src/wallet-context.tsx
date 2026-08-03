@@ -132,7 +132,7 @@ export function WalletProvider({ children }: { children: ReactNode }) {
   const deploy = useCallback(
     async (credentialName?: string): Promise<string | null> => {
       if (!providers) {
-        setDeployError('Connect 1AM (Preprod) or Lace first.');
+        setDeployError('Connect 1AM (Preview) or Lace first.');
         return null;
       }
       setDeploying(true);
@@ -143,7 +143,7 @@ export function WalletProvider({ children }: { children: ReactNode }) {
         const { contractAddress } = await deployCredentialContract(providers, credentialName);
         saveContractAddressOverride(contractAddress);
         setConfig(loadConfig());
-        pushActivity('deploy_success', 'Contract deployed on Preprod', contractAddress);
+        pushActivity('deploy_success', 'Contract deployed on Preview', contractAddress);
         return contractAddress;
       } catch (err) {
         const message = err instanceof Error ? err.message : String(err);

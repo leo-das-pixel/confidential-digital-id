@@ -7,7 +7,7 @@
 # Also mirrored in cipherid-ui/public/_redirects so it ships in dist.
 [[redirects]]
   from = "/proof-server/*"
-  to = "https://proof-server.preprod.midnight.network/:splat"
+  to = "https://proof-server.preview.midnight.network/:splat"
   status = 200
   force = true
 

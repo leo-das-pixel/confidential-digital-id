@@ -7,7 +7,7 @@ import App from './App.tsx';
 const networkId =
   import.meta.env.VITE_NETWORK_ID ||
   import.meta.env.VITE_NETWORK ||
-  (import.meta.env.PROD ? 'preprod' : 'undeployed');
+  (import.meta.env.PROD ? 'preview' : 'undeployed');
 setNetworkId(networkId);
 
 createRoot(document.getElementById('root')!).render(

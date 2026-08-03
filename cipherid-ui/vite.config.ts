@@ -23,12 +23,22 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
+      'cross-fetch': path.resolve(__dirname, 'src/shims/cross-fetch-offset-fix.ts'),
     },
   },
   build: {
     target: 'esnext',
   },
   server: {
-    port: 5173,
+    port: 5175,
+    strictPort: true,
+    proxy: {
+      '/proof-server': {
+        target: 'https://proof-server.preview.midnight.network',
+        changeOrigin: true,
+        secure: true,
+        rewrite: (p) => p.replace(/^\/proof-server/, ''),
+      },
+    },
   },
 });
